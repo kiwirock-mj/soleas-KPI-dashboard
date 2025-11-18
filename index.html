@@ -411,8 +411,9 @@
             return chunked_arr;
         }
 
-        const salesPages = chunkArray(salesData, 4); 
-        const studentsPages = chunkArray(studentsData, 4); 
+        // 🌟 [수정] 페이지 당 항목 수를 5로 변경
+        const salesPages = chunkArray(salesData, 5); 
+        const studentsPages = chunkArray(studentsData, 5); 
         let currentPageIndex = 0;
 
         function displayPage(pageIndex) {

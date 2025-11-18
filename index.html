@@ -166,7 +166,13 @@
         
         .ranking-table-wrapper h2 { font-size: 1.575rem; color: #f0f0f0; margin: 0 0 20px 0; text-align: left; flex-shrink: 0; }
         table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        /* 🌟 [수정] 순위 테이블 셀 패딩을 줄여서 한 페이지에 5개 항목 여유 공간 확보 */
+        th, td { 
+            padding: 14px; 
+            text-align: left; 
+            border-bottom: 1px solid var(--border-color); 
+            vertical-align: middle; 
+        }
         th { font-weight: 700; color: var(--text-secondary); font-size: 0.945rem; }
         tbody { transition: opacity 0.4s ease-in-out; }
         .fading { opacity: 0; }
@@ -411,7 +417,7 @@
             return chunked_arr;
         }
 
-        // 🌟 [수정] 페이지 당 항목 수를 5로 변경
+        // 페이지 당 항목 수는 5로 유지
         const salesPages = chunkArray(salesData, 5); 
         const studentsPages = chunkArray(studentsData, 5); 
         let currentPageIndex = 0;

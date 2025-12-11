@@ -179,4 +179,461 @@
         .equal-change { color: var(--text-secondary); }
         .bar-cell { position: relative; min-width: 250px; }
         .bar-container { position: relative; height: 30px; background-color: #3a3a5e; border-radius: 5px; }
-        .bar { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; transition: width 0.5s ease-
+        .bar { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; transition: width 0.5s ease-in-out; }
+        .bar-sales { background-color: var(--sales-bar); }
+        .bar-students { background-color: var(--students-bar); }
+        .prev-marker { position: absolute; top: -5px; bottom: -5px; width: 4px; border-radius: 2px; z-index: 5; transition: background-color 0.4s ease-in-out; }
+        .prev-marker.increase { background-color: var(--prev-marker-increase-color); }
+        .prev-marker.decrease { background-color: var(--prev-marker-decrease-color); }
+        .value-label { display: flex; justify-content: space-between; margin-top: 5px; font-size: 0.84rem; color: var(--text-secondary); }
+        .current-value { font-weight: 700; color: var(--text-primary); }
+        .rank-1 .branch-name { font-weight: 700; font-size: 1.47rem; color: #ffd700; }
+        .rank-2 .branch-name { font-weight: 700; font-size: 1.365rem; color: #c0c0c0; }
+        .rank-3 .branch-name { font-weight: 700; font-size: 1.26rem; color: #cd7f32; }
+        .highlight-branch { background-color: var(--highlight-color); border-left: 4px solid var(--highlight-border); border-right: 4px solid var(--highlight-border); }
+        .highlight-branch td { font-weight: 700; }
+
+        /* --- 시계 섹션 스타일 --- */
+        #clock-section {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5%;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(1);
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+        #clock-section.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1.9);
+        }
+
+        .analog-clock {
+            width: 350px; height: 350px;
+            border: 10px solid var(--card-color);
+            border-radius: 50%;
+            position: relative;
+            background-color: var(--bg-color);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        .analog-clock .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom;
+            background-color: var(--text-primary);
+            border-radius: 4px;
+        }
+        .analog-clock .hour-hand { width: 8px; height: 90px; }
+        .analog-clock .minute-hand { width: 6px; height: 120px; }
+        .analog-clock .second-hand { width: 3px; height: 140px; background-color: #f44336; }
+        .analog-clock .center-dot {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 15px; height: 15px;
+            background-color: #f44336;
+            border-radius: 50%;
+            z-index: 10;
+        }
+
+        .time-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 250px;
+            text-align: right;
+        }
+        #date-display { font-size: 2.5rem; font-weight: 500; color: var(--text-secondary); }
+        #digital-clock-display { font-size: 6rem; font-weight: 700; color: var(--text-title); }
+
+        @media (max-width: 1024px) {
+            body { height: auto; overflow-y: auto; }
+            .dashboard-container { height: auto; }
+            .content-area { overflow: visible; }
+            .ranking-section, .cumulative-summary-section, .current-summary-section { flex-direction: column; }
+            .cumulative-sales-box { flex: 1; }
+            .summary-box { flex: 1; } 
+            h1 { font-size: 1.89rem; }
+            .summary-box .summary-value { font-size: 1.89rem; }
+            #clock-section { flex-direction: column; gap: 20px; }
+            .analog-clock { width: 250px; height: 250px; }
+            .time-info { height: auto; text-align: center; }
+            #date-display { font-size: 1.5rem; }
+            #digital-clock-display { font-size: 4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="scaler-wrapper">
+        <div class="dashboard-container">
+            <div class="fixed-header">
+                <header class="header">
+                    <h1>Soleas KPI Dashboard <span class="update-tag">2025/12/05 집계 기준</span></h1>
+                    <div id="datetime"></div>
+                </header>
+
+                <section class="cumulative-summary-section">
+                    <div class="summary-box cumulative-sales-box">
+                        <h3>누적 총 매출액 (25년 1월 ~ 11월)</h3>
+                        <p class="summary-value">5,194,980,596 원</p>
+                    </div>
+                </section>
+
+                <section class="current-summary-section">
+                    <div class="summary-box">
+                        <h3>총 매출액 (25년 10월)</h3>
+                        <div class="summary-main-display" id="total-sales-summary">
+                            <p class="summary-value">계산 중...</p>
+                            <div class="growth-summary equal">
+                                <span class="growth-percent"></span>
+                                <span class="growth-delta"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-box">
+                        <h3>총 원생 수 (25년 10월)</h3>
+                        <div class="summary-main-display" id="total-students-summary">
+                            <p class="summary-value">계산 중...</p>
+                            <div class="growth-summary equal">
+                                <span class="growth-percent"></span>
+                                <span class="growth-delta"></span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="content-area">
+                <section class="ranking-section">
+                    <div class="ranking-table-wrapper">
+                        <h2>매출 순위 (전월 대비)</h2>
+                        <table id="sales-table"><thead><tr><th>순위</th><th>지점명</th><th>매출 비교</th></tr></thead><tbody></tbody></table>
+                    </div>
+                    <div class="ranking-table-wrapper">
+                        <h2>원생 수 순위 (전월 대비)</h2>
+                        <table id="students-table"><thead><tr><th>순위</th><th>지점명</th><th>원생 수 비교</th></tr></thead><tbody></tbody></table>
+                    </div>
+                </section>
+
+                <section id="clock-section">
+                    <div class="analog-clock">
+                        <div class="hand hour-hand" id="hour-hand"></div>
+                        <div class="hand minute-hand" id="minute-hand"></div>
+                        <div class="hand second-hand" id="second-hand"></div>
+                        <div class="center-dot"></div>
+                    </div>
+                    <div class="time-info">
+                        <div id="date-display"></div>
+                        <div id="digital-clock-display"></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <script>
+        // ------------------------------------------------------------------
+        // 1. 김해장유점 삭제, 노원중계점 추가 및 매출 데이터 수정 반영
+        // ------------------------------------------------------------------
+        const salesData = [
+            // { name: '김해장유점', current: 0, prev: 3825000 }, <- 삭제됨
+            { name: '청라국제도시점', current: 10353500, prev: 10943900 },
+            { name: '시흥은계점', current: 22532983, prev: 20351500 },
+            { name: '부천신중동점', current: 40668682, prev: 40972099 },
+            { name: '부천상동점', current: 25989750, prev: 26902500 },
+            { name: '안산고잔점', current: 17413093, prev: 17299593 },
+            { name: '일산중산점', current: 12806499, prev: 10546499 },
+            { name: '시흥목감점', current: 12540600, prev: 12108100 },
+            { name: '분당오리점', current: 11805540, prev: 11838039 },
+            { name: '논산내동점', current: 16101198, prev: 15555698 },
+            { name: '광주풍암점', current: 37741498, prev: 37961816 },
+            { name: '수원광교점', current: 36617000, prev: 37013500 },
+            { name: '부평삼산점', current: 13584250, prev: 13064500 },
+            { name: '수원영통점', current: 23619916, prev: 24335000 },
+            { name: '안성시청점', current: 21988750, prev: 20892500 },
+            { name: '광주수완점', current: 36249833, prev: 34670374 },
+            { name: '광주봉선점', current: 55567264, prev: 55916531 },
+            { name: '분당판교점', current: 31908032, prev: 30887531 }, 
+            { name: '대구달서점', current: 14277500, prev: 12692500 },
+            { name: '천안불당점', current: 24698000, prev: 26733500 },
+            { name: '송파잠실점', current: 30119150, prev: 26418133 },
+            { name: '김포시청점', current: 13726500, prev: 12205500 },
+            { name: '동탄역점', current: 25199500, prev: 22995400 },
+            { name: '광명철산점', current: 17645500, prev: 15702250 },
+            { name: '포항장성점', current: 10221500, prev: 6168250 },
+            { name: '노원중계점', current: 1626250, prev: 0 } // 신규 추가 지점
+        ].sort((a, b) => b.current - a.current).map((item, index) => ({...item, rank: index + 1}));
+
+        // ------------------------------------------------------------------
+        // 2. 김해장유점 삭제, 노원중계점 추가 및 원생 수 데이터 수정 반영
+        // ------------------------------------------------------------------
+        const studentsData = [
+            // { name: '김해장유점', current: 0, prev: 25 }, <- 삭제됨
+            { name: '청라국제도시점', current: 87, prev: 93 },
+            { name: '시흥은계점', current: 154, prev: 141 },
+            { name: '부천신중동점', current: 256, prev: 260 },
+            { name: '부천상동점', current: 189, prev: 190 },
+            { name: '안산고잔점', current: 126, prev: 124 },
+            { name: '일산중산점', current: 91, prev: 88 },
+            { name: '시흥목감점', current: 86, prev: 87 },
+            { name: '분당오리점', current: 99, prev: 104 },
+            { name: '논산내동점', current: 128, prev: 128 },
+            { name: '광주풍암점', current: 263, prev: 269 },
+            { name: '수원광교점', current: 283, prev: 284 },
+            { name: '부평삼산점', current: 99, prev: 98 },
+            { name: '수원영통점', current: 181, prev: 181 },
+            { name: '안성시청점', current: 162, prev: 160 },
+            { name: '광주수완점', current: 292, prev: 287 },
+            { name: '광주봉선점', current: 398, prev: 398 },
+            { name: '분당판교점', current: 262, prev: 257 },
+            { name: '대구달서점', current: 98, prev: 89 },
+            { name: '천안불당점', current: 169, prev: 169 },
+            { name: '송파잠실점', current: 197, prev: 169 },
+            { name: '김포시청점', current: 105, prev: 92 },
+            { name: '동탄역점', current: 199, prev: 183 },
+            { name: '광명철산점', current: 135, prev: 126 },
+            { name: '포항장성점', current: 73, prev: 64 },
+            { name: '노원중계점', current: 49, prev: 0 } // 신규 추가 지점
+        ].sort((a, b) => b.current - a.current).map((item, index) => ({...item, rank: index + 1}));
+        // ------------------------------------------------------------------
+
+
+        function calculateTotalSalesSummary() {
+            const totalCurrentSales = salesData.reduce((sum, item) => sum + item.current, 0);
+            const totalPrevSales = salesData.reduce((sum, item) => sum + item.prev, 0);
+            const salesDelta = totalCurrentSales - totalPrevSales;
+            const salesGrowthRate = (totalPrevSales === 0) ? 0 : (salesDelta / totalPrevSales) * 100;
+            const isIncrease = salesDelta >= 0;
+
+            const summaryElement = document.getElementById('total-sales-summary');
+            summaryElement.innerHTML = `
+                <p class="summary-value">${totalCurrentSales.toLocaleString()} 원</p>
+                <div class="growth-summary ${isIncrease ? (salesDelta === 0 ? 'equal' : 'increase') : 'decrease'}">
+                    <span class="growth-percent">${isIncrease ? (salesDelta === 0 ? '' : '▲') : '▼'}${Math.abs(salesGrowthRate).toFixed(3)}%</span>
+                    <span class="growth-delta">(${salesDelta >= 0 ? (salesDelta === 0 ? '0' : `+${salesDelta.toLocaleString()}`) : salesDelta.toLocaleString()} 원)</span>
+                </div>
+            `;
+        }
+
+        function calculateTotalStudentsSummary() {
+            const totalCurrentStudents = studentsData.reduce((sum, item) => sum + item.current, 0);
+            const totalPrevStudents = studentsData.reduce((sum, item) => sum + item.prev, 0);
+            const studentsDelta = totalCurrentStudents - totalPrevStudents;
+            const studentsGrowthRate = (totalPrevStudents === 0) ? 0 : (studentsDelta / totalPrevStudents) * 100;
+            const isIncrease = studentsDelta >= 0;
+
+            const summaryElement = document.getElementById('total-students-summary');
+            summaryElement.innerHTML = `
+                <p class="summary-value">${totalCurrentStudents.toLocaleString()} 명</p>
+                <div class="growth-summary ${isIncrease ? (studentsDelta === 0 ? 'equal' : 'increase') : 'decrease'}">
+                    <span class="growth-percent">${isIncrease ? (studentsDelta === 0 ? '' : '▲') : '▼'}${Math.abs(studentsGrowthRate).toFixed(2)}%</span>
+                    <span class="growth-delta">(${studentsDelta >= 0 ? (studentsDelta === 0 ? '0' : `+${studentsDelta.toLocaleString()}`) : studentsDelta.toLocaleString()} 명)</span>
+                </div>
+            `;
+        }
+
+        const rankingSection = document.querySelector('.ranking-section');
+        const clockSection = document.getElementById('clock-section');
+        const hourHand = document.getElementById('hour-hand');
+        const minuteHand = document.getElementById('minute-hand');
+        const secondHand = document.getElementById('second-hand');
+        const dateDisplay = document.getElementById('date-display');
+        const digitalClockDisplay = document.getElementById('digital-clock-display');
+        let clockUpdateInterval;
+
+        function chunkArray(array, size) {
+            const chunked_arr = [];
+            for (let i = 0; i < array.length; i += size) chunked_arr.push(array.slice(i, i + size));
+            return chunked_arr;
+        }
+
+        const salesPages = chunkArray(salesData, 4); 
+        const studentsPages = chunkArray(studentsData, 4); 
+        let currentPageIndex = 0;
+
+        function displayPage(pageIndex) {
+            const salesTbody = document.querySelector('#sales-table tbody');
+            const studentsTbody = document.querySelector('#students-table tbody');
+            salesTbody.classList.add('fading');
+            studentsTbody.classList.add('fading');
+            setTimeout(() => {
+                salesTbody.innerHTML = '';
+                studentsTbody.innerHTML = '';
+                populateTablePage('sales-table', salesPages[pageIndex], 'bar-sales');
+                populateTablePage('students-table', studentsPages[pageIndex], 'bar-students');
+                salesTbody.classList.remove('fading');
+                studentsTbody.classList.remove('fading');
+            }, 400);
+        }
+
+        function populateTablePage(tableId, data, barClass) {
+            if (!data) return;
+            const tableBody = document.querySelector(`#${tableId} tbody`);
+            // 현재 데이터 페이지가 아니라 전체 데이터를 기준으로 최대값을 잡아야 합니다.
+            const maxVal = Math.max(...(tableId === 'sales-table' ? salesData : studentsData).map(d => d.current));
+            const unit = tableId === 'sales-table' ? '원' : '명';
+            const medals = ['🥇', '🥈', '🥉'];
+
+            data.forEach(item => {
+                const isIncrease = item.current > item.prev;
+                const isNew = item.prev === 0 && item.current > 0;
+                const isSame = item.current === item.prev;
+                
+                let growthPercentageText;
+                let growthDeltaText;
+                let changeClass;
+
+                if (isNew) {
+                    growthPercentageText = 'New';
+                    growthDeltaText = `+${item.current.toLocaleString()} ${unit}`;
+                    changeClass = 'increase';
+                } else if (item.current === 0 && item.prev > 0) {
+                    // 신규 폐점 (매출/원생수가 0으로 변경)
+                    growthPercentageText = 'CLOSED';
+                    growthDeltaText = `${item.prev > 0 ? '-' : ''}${item.prev.toLocaleString()} ${unit}`;
+                    changeClass = 'decrease';
+                } else if (isSame) {
+                    growthPercentageText = '0.0%';
+                    growthDeltaText = `0 ${unit}`;
+                    changeClass = 'equal-change';
+                } else {
+                    const growthPercentage = ((item.current - item.prev) / item.prev) * 100;
+                    const growthDelta = item.current - item.prev;
+                    growthPercentageText = `${isIncrease ? '▲' : '▼'}${Math.abs(growthPercentage).toFixed(2)}%`; // 소수점 둘째 자리까지 표시
+                    growthDeltaText = growthDelta >= 0 ? `+${growthDelta.toLocaleString()} ${unit}` : `${growthDelta.toLocaleString()} ${unit}`;
+                    changeClass = isIncrease ? 'increase' : 'decrease';
+                }
+
+                const row = document.createElement('tr');
+                if (item.rank <= 3) row.classList.add(`rank-${item.rank}`);
+                // 송파잠실점 강조는 유지
+                if (item.name === '송파잠실점') row.classList.add('highlight-branch');
+                const medal = item.rank <= 3 ? medals[item.rank - 1] : '';
+
+                row.innerHTML = `
+                    <td>${item.rank}</td>
+                    <td>
+                        <div class="branch-info">
+                            <span class="branch-name">${medal} ${item.name}</span>
+                            <div class="growth-rate-container">
+                                <span class="growth-percentage ${changeClass}">${growthPercentageText}</span>
+                                <span class="growth-delta ${changeClass}">(${growthDeltaText})</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="bar-cell">
+                        <div class="bar-container">
+                            <div class="bar ${barClass}" style="width: ${(item.current / maxVal) * 100}%"></div>
+                            <div class="prev-marker ${changeClass}" style="left: ${(item.prev / maxVal) * 100}%"></div>
+                        </div>
+                        <div class="value-label">
+                            <span>전월: ${item.prev.toLocaleString()} ${unit}</span>
+                            <span class="current-value">당월: ${item.current.toLocaleString()} ${unit}</span>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function updateClocks() {
+            const now = new Date();
+            const seconds = now.getSeconds();
+            const minutes = now.getMinutes();
+            let hours = now.getHours();
+
+            if (hours >= 12) {
+                hours = hours - 12;
+            }
+            if (hours === 0) {
+                hours = 12;
+            }
+
+            const secondsDegrees = (seconds / 60) * 360;
+            const minutesDegrees = (minutes / 60) * 360 + (seconds / 60) * 6;
+            const hoursDegrees = (hours / 12) * 360 + (minutes / 60) * 30;
+
+            secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+            minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
+            hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
+
+            dateDisplay.textContent = now.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+            digitalClockDisplay.textContent = now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+        }
+
+        function showClock() {
+            rankingSection.classList.add('fading');
+            setTimeout(() => {
+                rankingSection.style.display = 'none';
+                clockSection.classList.add('visible');
+                updateClocks();
+                clockUpdateInterval = setInterval(updateClocks, 1000);
+                setTimeout(hideClockAndRestart, 5000); // 5초 유지
+            }, 500);
+        }
+
+        function hideClockAndRestart() {
+            clearInterval(clockUpdateInterval);
+            clockSection.classList.remove('visible');
+            setTimeout(() => {
+                rankingSection.style.display = 'flex';
+                setTimeout(() => rankingSection.classList.remove('fading'), 50);
+                currentPageIndex = 0;
+                runSlideshow();
+            }, 500);
+        }
+
+        function runSlideshow() {
+            // 매출, 원생 수 페이지 중 더 많은 페이지 수 기준으로 순환
+            const maxPages = Math.max(salesPages.length, studentsPages.length); 
+            
+            if (currentPageIndex < maxPages) {
+                // 페이지 데이터가 없으면 빈 화면 표시 (데이터가 부족한 경우)
+                const salesPage = salesPages[currentPageIndex];
+                const studentsPage = studentsPages[currentPageIndex];
+                
+                const salesTbody = document.querySelector('#sales-table tbody');
+                const studentsTbody = document.querySelector('#students-table tbody');
+                
+                salesTbody.classList.add('fading');
+                studentsTbody.classList.add('fading');
+
+                setTimeout(() => {
+                    salesTbody.innerHTML = '';
+                    studentsTbody.innerHTML = '';
+                    populateTablePage('sales-table', salesPage, 'bar-sales');
+                    populateTablePage('students-table', studentsPage, 'bar-students');
+                    salesTbody.classList.remove('fading');
+                    studentsTbody.classList.remove('fading');
+                }, 400);
+
+                currentPageIndex++;
+                setTimeout(runSlideshow, 10000);
+            } else {
+                showClock();
+            }
+        }
+
+
+        function updateDateTime() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('datetime').textContent = now.toLocaleDateString('ko-KR', options);
+        }
+
+        window.onload = function() {
+            calculateTotalSalesSummary(); // 총 매출액 및 성장률 계산 및 표시
+            calculateTotalStudentsSummary(); // 총 원생 수 및 성장률 계산 및 표시
+            updateDateTime();
+            setInterval(updateDateTime, 60000);
+            runSlideshow();
+        };
+    </script>
+</body>
+</html>

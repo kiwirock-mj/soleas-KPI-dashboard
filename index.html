@@ -33,8 +33,6 @@
         }
 
         .scaler-wrapper {
-            transform: scale(1.0);
-            transform-origin: top left;
             width: 100%;
             height: 100%;
             position: relative;
@@ -187,8 +185,6 @@
         .rank-1 .branch-name { font-weight: 700; font-size: 1.47rem; color: #ffd700; }
         .rank-2 .branch-name { font-weight: 700; font-size: 1.365rem; color: #c0c0c0; }
         .rank-3 .branch-name { font-weight: 700; font-size: 1.26rem; color: #cd7f32; }
-        .highlight-branch { background-color: var(--highlight-color); border-left: 4px solid var(--highlight-border); border-right: 4px solid var(--highlight-border); }
-        .highlight-branch td { font-weight: 700; }
 
         #clock-section {
             position: absolute;
@@ -247,22 +243,6 @@
         }
         #date-display { font-size: 2.5rem; font-weight: 500; color: var(--text-secondary); }
         #digital-clock-display { font-size: 6rem; font-weight: 700; color: var(--text-title); }
-
-        @media (max-width: 1024px) {
-            body { height: auto; overflow-y: auto; }
-            .dashboard-container { height: auto; }
-            .content-area { overflow: visible; }
-            .ranking-section, .cumulative-summary-section, .current-summary-section { flex-direction: column; }
-            .cumulative-sales-box { flex: 1; }
-            .summary-box { flex: 1; } 
-            h1 { font-size: 1.89rem; }
-            .summary-box .summary-value { font-size: 1.89rem; }
-            #clock-section { flex-direction: column; gap: 20px; }
-            .analog-clock { width: 250px; height: 250px; }
-            .time-info { height: auto; text-align: center; }
-            #date-display { font-size: 1.5rem; }
-            #digital-clock-display { font-size: 4rem; }
-        }
     </style>
 </head>
 <body>
@@ -283,14 +263,14 @@
 
                 <section class="current-summary-section">
                     <div class="summary-box">
-                        <h3>총 매출액(25년 11월 기준)</h3>
+                        <h3>총 매출액(25년 12월 기준)</h3>
                         <div class="summary-main-display" id="total-sales-summary">
                             <p class="summary-value">계산 중...</p>
                         </div>
                     </div>
                     
                     <div class="summary-box">
-                        <h3>총 원생수(25년 11월 기준)</h3>
+                        <h3>총 원생수(25년 12월 기준)</h3>
                         <div class="summary-main-display" id="total-students-summary">
                             <p class="summary-value">계산 중...</p>
                         </div>
@@ -326,7 +306,6 @@
         </div>
     </div>
     <script>
-        // 이미지 수치 기반 데이터 업데이트
         const salesData = [
             { name: '광주봉선점', current: 56834930, prev: 55567264 },
             { name: '부천신중동점', current: 38146932, prev: 40668682 },
@@ -434,7 +413,7 @@
             return chunked_arr;
         }
 
-        const salesPages = chunkArray(salesData, 4); // 한 슬라이드에 4개씩
+        const salesPages = chunkArray(salesData, 4); 
         const studentsPages = chunkArray(studentsData, 4); 
         let currentPageIndex = 0;
 
@@ -537,25 +516,29 @@
 
         function runSlideshow() {
             const maxPages = Math.max(salesPages.length, studentsPages.length); 
+            
             if (currentPageIndex < maxPages) {
                 const salesTbody = document.querySelector('#sales-table tbody');
                 const studentsTbody = document.querySelector('#students-table tbody');
+                
                 salesTbody.classList.add('fading');
                 studentsTbody.classList.add('fading');
 
                 setTimeout(() => {
                     salesTbody.innerHTML = '';
                     studentsTbody.innerHTML = '';
+                    
                     populateTablePage('sales-table', salesPages[currentPageIndex], 'bar-sales');
                     populateTablePage('students-table', studentsPages[currentPageIndex], 'bar-students');
+                    
                     salesTbody.classList.remove('fading');
                     studentsTbody.classList.remove('fading');
+                    
+                    currentPageIndex++;
+                    setTimeout(runSlideshow, 10000);
                 }, 400);
-
-                currentPageIndex++;
-                setTimeout(runSlideshow, 10000);
             } else {
-                showClock();
+                showClock(); 
             }
         }
 
@@ -570,7 +553,7 @@
             calculateTotalStudentsSummary();
             updateDateTime();
             setInterval(updateDateTime, 60000);
-            runSlideshow();
+            runSlideshow(); 
         };
     </script>
 </body>

@@ -71,7 +71,6 @@
 
         #datetime { font-size: 1.26rem; color: var(--text-secondary); font-weight: 500; }
 
-        /* Summary Box 레이아웃 및 크기 조정 */
         .cumulative-summary-section {
             display: flex;
             justify-content: center;
@@ -91,7 +90,6 @@
             padding: 15px 30px; 
             border-radius: 12px;
             border: 1px solid var(--border-color);
-            /* 🌟 총 매출액/원생 수 박스 넓이 동일하게 */
             flex: 1; 
         }
 
@@ -153,7 +151,6 @@
             transition: opacity 0.4s ease-in-out; 
         }
 
-        /* 🌟 매출 순위/원생 수 순위 박스 넓이 동일하게 */
         .ranking-table-wrapper { 
             flex: 1; 
             background-color: var(--card-color); 
@@ -193,7 +190,6 @@
         .highlight-branch { background-color: var(--highlight-color); border-left: 4px solid var(--highlight-border); border-right: 4px solid var(--highlight-border); }
         .highlight-branch td { font-weight: 700; }
 
-        /* --- 시계 섹션 스타일 --- */
         #clock-section {
             position: absolute;
             top: 0; left: 0;
@@ -274,37 +270,29 @@
         <div class="dashboard-container">
             <div class="fixed-header">
                 <header class="header">
-                    <h1>Soleas KPI Dashboard <span class="update-tag">2025/12/05 집계 기준</span></h1>
+                    <h1>Soleas KPI Dashboard <span class="update-tag">2026/01/05 집계 기준</span></h1>
                     <div id="datetime"></div>
                 </header>
 
                 <section class="cumulative-summary-section">
                     <div class="summary-box cumulative-sales-box">
-                        <h3>누적 총 매출액 (25년 1월 ~ 11월)</h3>
-                        <p class="summary-value">5,194,980,596 원</p>
+                        <h3>누적 총 매출액(25년 1월~12월)</h3>
+                        <p class="summary-value">5,788,124,074 원</p>
                     </div>
                 </section>
 
                 <section class="current-summary-section">
                     <div class="summary-box">
-                        <h3>총 매출액 (25년 10월)</h3>
+                        <h3>총 매출액(25년 11월 기준)</h3>
                         <div class="summary-main-display" id="total-sales-summary">
                             <p class="summary-value">계산 중...</p>
-                            <div class="growth-summary equal">
-                                <span class="growth-percent"></span>
-                                <span class="growth-delta"></span>
-                            </div>
                         </div>
                     </div>
                     
                     <div class="summary-box">
-                        <h3>총 원생 수 (25년 10월)</h3>
+                        <h3>총 원생수(25년 11월 기준)</h3>
                         <div class="summary-main-display" id="total-students-summary">
                             <p class="summary-value">계산 중...</p>
-                            <div class="growth-summary equal">
-                                <span class="growth-percent"></span>
-                                <span class="growth-delta"></span>
-                            </div>
                         </div>
                     </div>
                 </section>
@@ -338,71 +326,64 @@
         </div>
     </div>
     <script>
-        // ------------------------------------------------------------------
-        // 1. 김해장유점 삭제, 노원중계점 추가 및 매출 데이터 수정 반영
-        // ------------------------------------------------------------------
+        // 이미지 수치 기반 데이터 업데이트
         const salesData = [
-            // { name: '김해장유점', current: 0, prev: 3825000 }, <- 삭제됨
-            { name: '청라국제도시점', current: 10353500, prev: 10943900 },
-            { name: '시흥은계점', current: 22532983, prev: 20351500 },
-            { name: '부천신중동점', current: 40668682, prev: 40972099 },
-            { name: '부천상동점', current: 25989750, prev: 26902500 },
-            { name: '안산고잔점', current: 17413093, prev: 17299593 },
-            { name: '일산중산점', current: 12806499, prev: 10546499 },
-            { name: '시흥목감점', current: 12540600, prev: 12108100 },
-            { name: '분당오리점', current: 11805540, prev: 11838039 },
-            { name: '논산내동점', current: 16101198, prev: 15555698 },
-            { name: '광주풍암점', current: 37741498, prev: 37961816 },
-            { name: '수원광교점', current: 36617000, prev: 37013500 },
-            { name: '부평삼산점', current: 13584250, prev: 13064500 },
-            { name: '수원영통점', current: 23619916, prev: 24335000 },
-            { name: '안성시청점', current: 21988750, prev: 20892500 },
-            { name: '광주수완점', current: 36249833, prev: 34670374 },
-            { name: '광주봉선점', current: 55567264, prev: 55916531 },
-            { name: '분당판교점', current: 31908032, prev: 30887531 }, 
-            { name: '대구달서점', current: 14277500, prev: 12692500 },
-            { name: '천안불당점', current: 24698000, prev: 26733500 },
-            { name: '송파잠실점', current: 30119150, prev: 26418133 },
-            { name: '김포시청점', current: 13726500, prev: 12205500 },
-            { name: '동탄역점', current: 25199500, prev: 22995400 },
-            { name: '광명철산점', current: 17645500, prev: 15702250 },
-            { name: '포항장성점', current: 10221500, prev: 6168250 },
-            { name: '노원중계점', current: 1626250, prev: 0 } // 신규 추가 지점
+            { name: '광주봉선점', current: 56834930, prev: 55567264 },
+            { name: '부천신중동점', current: 38146932, prev: 40668682 },
+            { name: '광주수완점', current: 37065400, prev: 36249833 },
+            { name: '광주풍암점', current: 36109498, prev: 37741498 },
+            { name: '수원광교점', current: 35473500, prev: 36617000 },
+            { name: '분당판교점', current: 32960098, prev: 31908032 },
+            { name: '동탄역점', current: 28957500, prev: 25199500 },
+            { name: '송파잠실점', current: 28784700, prev: 30119150 },
+            { name: '부천상동점', current: 27402500, prev: 25989750 },
+            { name: '수원영통점', current: 23920666, prev: 23619916 },
+            { name: '천안불당점', current: 23479800, prev: 24698000 },
+            { name: '안성시청점', current: 23074500, prev: 21988750 },
+            { name: '시흥은계점', current: 21714833, prev: 22532983 },
+            { name: '안산고잔점', current: 18530595, prev: 17413093 },
+            { name: '광명철산점', current: 18210750, prev: 17645500 },
+            { name: '노원중계점', current: 16940200, prev: 1626250 },
+            { name: '논산내동점', current: 15070031, prev: 16101198 },
+            { name: '대구달서점', current: 14486250, prev: 14277500 },
+            { name: '부평삼산점', current: 13474000, prev: 13584250 },
+            { name: '시흥목감점', current: 13118450, prev: 12540600 },
+            { name: '일산중산점', current: 12986666, prev: 12806499 },
+            { name: '김포시청점', current: 12462400, prev: 13726500 },
+            { name: '분당오리점', current: 12321039, prev: 11805540 },
+            { name: '청라국제도시점', current: 11247500, prev: 10353500 },
+            { name: '포항장성점', current: 10717040, prev: 10221500 },
+            { name: '송파문정점', current: 9653700, prev: 0 }
         ].sort((a, b) => b.current - a.current).map((item, index) => ({...item, rank: index + 1}));
 
-        // ------------------------------------------------------------------
-        // 2. 김해장유점 삭제, 노원중계점 추가 및 원생 수 데이터 수정 반영
-        // ------------------------------------------------------------------
         const studentsData = [
-            // { name: '김해장유점', current: 0, prev: 25 }, <- 삭제됨
-            { name: '청라국제도시점', current: 87, prev: 93 },
-            { name: '시흥은계점', current: 154, prev: 141 },
-            { name: '부천신중동점', current: 256, prev: 260 },
-            { name: '부천상동점', current: 189, prev: 190 },
-            { name: '안산고잔점', current: 126, prev: 124 },
-            { name: '일산중산점', current: 91, prev: 88 },
-            { name: '시흥목감점', current: 86, prev: 87 },
-            { name: '분당오리점', current: 99, prev: 104 },
-            { name: '논산내동점', current: 128, prev: 128 },
-            { name: '광주풍암점', current: 263, prev: 269 },
-            { name: '수원광교점', current: 283, prev: 284 },
-            { name: '부평삼산점', current: 99, prev: 98 },
-            { name: '수원영통점', current: 181, prev: 181 },
-            { name: '안성시청점', current: 162, prev: 160 },
-            { name: '광주수완점', current: 292, prev: 287 },
-            { name: '광주봉선점', current: 398, prev: 398 },
-            { name: '분당판교점', current: 262, prev: 257 },
-            { name: '대구달서점', current: 98, prev: 89 },
-            { name: '천안불당점', current: 169, prev: 169 },
-            { name: '송파잠실점', current: 197, prev: 169 },
-            { name: '김포시청점', current: 105, prev: 92 },
-            { name: '동탄역점', current: 199, prev: 183 },
-            { name: '광명철산점', current: 135, prev: 126 },
-            { name: '포항장성점', current: 73, prev: 64 },
-            { name: '노원중계점', current: 49, prev: 0 } // 신규 추가 지점
+            { name: '광주봉선점', current: 406, prev: 398 },
+            { name: '광주수완점', current: 309, prev: 292 },
+            { name: '수원광교점', current: 284, prev: 283 },
+            { name: '분당판교점', current: 267, prev: 262 },
+            { name: '광주풍암점', current: 258, prev: 263 },
+            { name: '부천신중동점', current: 255, prev: 256 },
+            { name: '동탄역점', current: 231, prev: 199 },
+            { name: '부천상동점', current: 191, prev: 189 },
+            { name: '수원영통점', current: 188, prev: 181 },
+            { name: '송파잠실점', current: 187, prev: 192 },
+            { name: '안성시청점', current: 166, prev: 162 },
+            { name: '천안불당점', current: 158, prev: 169 },
+            { name: '시흥은계점', current: 147, prev: 154 },
+            { name: '광명철산점', current: 143, prev: 135 },
+            { name: '안산고잔점', current: 122, prev: 126 },
+            { name: '노원중계점', current: 121, prev: 49 },
+            { name: '논산내동점', current: 121, prev: 128 },
+            { name: '분당오리점', current: 107, prev: 99 },
+            { name: '일산중산점', current: 97, prev: 91 },
+            { name: '대구달서점', current: 97, prev: 98 },
+            { name: '청라국제도시점', current: 95, prev: 87 },
+            { name: '부평삼산점', current: 95, prev: 99 },
+            { name: '시흥목감점', current: 92, prev: 86 },
+            { name: '김포시청점', current: 89, prev: 105 },
+            { name: '포항장성점', current: 77, prev: 73 },
+            { name: '송파문정점', current: 61, prev: 0 }
         ].sort((a, b) => b.current - a.current).map((item, index) => ({...item, rank: index + 1}));
-        // ------------------------------------------------------------------
-
 
         function calculateTotalSalesSummary() {
             const totalCurrentSales = salesData.reduce((sum, item) => sum + item.current, 0);
@@ -415,7 +396,7 @@
             summaryElement.innerHTML = `
                 <p class="summary-value">${totalCurrentSales.toLocaleString()} 원</p>
                 <div class="growth-summary ${isIncrease ? (salesDelta === 0 ? 'equal' : 'increase') : 'decrease'}">
-                    <span class="growth-percent">${isIncrease ? (salesDelta === 0 ? '' : '▲') : '▼'}${Math.abs(salesGrowthRate).toFixed(3)}%</span>
+                    <span class="growth-percent">${isIncrease ? (salesDelta === 0 ? '' : '▲') : '▼'}${Math.abs(salesGrowthRate).toFixed(2)}%</span>
                     <span class="growth-delta">(${salesDelta >= 0 ? (salesDelta === 0 ? '0' : `+${salesDelta.toLocaleString()}`) : salesDelta.toLocaleString()} 원)</span>
                 </div>
             `;
@@ -453,29 +434,13 @@
             return chunked_arr;
         }
 
-        const salesPages = chunkArray(salesData, 4); 
+        const salesPages = chunkArray(salesData, 4); // 한 슬라이드에 4개씩
         const studentsPages = chunkArray(studentsData, 4); 
         let currentPageIndex = 0;
-
-        function displayPage(pageIndex) {
-            const salesTbody = document.querySelector('#sales-table tbody');
-            const studentsTbody = document.querySelector('#students-table tbody');
-            salesTbody.classList.add('fading');
-            studentsTbody.classList.add('fading');
-            setTimeout(() => {
-                salesTbody.innerHTML = '';
-                studentsTbody.innerHTML = '';
-                populateTablePage('sales-table', salesPages[pageIndex], 'bar-sales');
-                populateTablePage('students-table', studentsPages[pageIndex], 'bar-students');
-                salesTbody.classList.remove('fading');
-                studentsTbody.classList.remove('fading');
-            }, 400);
-        }
 
         function populateTablePage(tableId, data, barClass) {
             if (!data) return;
             const tableBody = document.querySelector(`#${tableId} tbody`);
-            // 현재 데이터 페이지가 아니라 전체 데이터를 기준으로 최대값을 잡아야 합니다.
             const maxVal = Math.max(...(tableId === 'sales-table' ? salesData : studentsData).map(d => d.current));
             const unit = tableId === 'sales-table' ? '원' : '명';
             const medals = ['🥇', '🥈', '🥉'];
@@ -485,19 +450,12 @@
                 const isNew = item.prev === 0 && item.current > 0;
                 const isSame = item.current === item.prev;
                 
-                let growthPercentageText;
-                let growthDeltaText;
-                let changeClass;
+                let growthPercentageText, growthDeltaText, changeClass;
 
                 if (isNew) {
                     growthPercentageText = 'New';
                     growthDeltaText = `+${item.current.toLocaleString()} ${unit}`;
                     changeClass = 'increase';
-                } else if (item.current === 0 && item.prev > 0) {
-                    // 신규 폐점 (매출/원생수가 0으로 변경)
-                    growthPercentageText = 'CLOSED';
-                    growthDeltaText = `${item.prev > 0 ? '-' : ''}${item.prev.toLocaleString()} ${unit}`;
-                    changeClass = 'decrease';
                 } else if (isSame) {
                     growthPercentageText = '0.0%';
                     growthDeltaText = `0 ${unit}`;
@@ -505,15 +463,13 @@
                 } else {
                     const growthPercentage = ((item.current - item.prev) / item.prev) * 100;
                     const growthDelta = item.current - item.prev;
-                    growthPercentageText = `${isIncrease ? '▲' : '▼'}${Math.abs(growthPercentage).toFixed(2)}%`; // 소수점 둘째 자리까지 표시
+                    growthPercentageText = `${isIncrease ? '▲' : '▼'}${Math.abs(growthPercentage).toFixed(2)}%`;
                     growthDeltaText = growthDelta >= 0 ? `+${growthDelta.toLocaleString()} ${unit}` : `${growthDelta.toLocaleString()} ${unit}`;
                     changeClass = isIncrease ? 'increase' : 'decrease';
                 }
 
                 const row = document.createElement('tr');
                 if (item.rank <= 3) row.classList.add(`rank-${item.rank}`);
-                // 송파잠실점 강조는 유지
-                if (item.name === '송파잠실점') row.classList.add('highlight-branch');
                 const medal = item.rank <= 3 ? medals[item.rank - 1] : '';
 
                 row.innerHTML = `
@@ -547,21 +503,11 @@
             const seconds = now.getSeconds();
             const minutes = now.getMinutes();
             let hours = now.getHours();
+            const ampmHours = hours % 12 || 12;
 
-            if (hours >= 12) {
-                hours = hours - 12;
-            }
-            if (hours === 0) {
-                hours = 12;
-            }
-
-            const secondsDegrees = (seconds / 60) * 360;
-            const minutesDegrees = (minutes / 60) * 360 + (seconds / 60) * 6;
-            const hoursDegrees = (hours / 12) * 360 + (minutes / 60) * 30;
-
-            secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
-            minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
-            hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
+            secondHand.style.transform = `rotate(${(seconds / 60) * 360}deg)`;
+            minuteHand.style.transform = `rotate(${(minutes / 60) * 360 + (seconds / 60) * 6}deg)`;
+            hourHand.style.transform = `rotate(${(ampmHours / 12) * 360 + (minutes / 60) * 30}deg)`;
 
             dateDisplay.textContent = now.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
             digitalClockDisplay.textContent = now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
@@ -574,7 +520,7 @@
                 clockSection.classList.add('visible');
                 updateClocks();
                 clockUpdateInterval = setInterval(updateClocks, 1000);
-                setTimeout(hideClockAndRestart, 5000); // 5초 유지
+                setTimeout(hideClockAndRestart, 5000);
             }, 500);
         }
 
@@ -590,25 +536,18 @@
         }
 
         function runSlideshow() {
-            // 매출, 원생 수 페이지 중 더 많은 페이지 수 기준으로 순환
             const maxPages = Math.max(salesPages.length, studentsPages.length); 
-            
             if (currentPageIndex < maxPages) {
-                // 페이지 데이터가 없으면 빈 화면 표시 (데이터가 부족한 경우)
-                const salesPage = salesPages[currentPageIndex];
-                const studentsPage = studentsPages[currentPageIndex];
-                
                 const salesTbody = document.querySelector('#sales-table tbody');
                 const studentsTbody = document.querySelector('#students-table tbody');
-                
                 salesTbody.classList.add('fading');
                 studentsTbody.classList.add('fading');
 
                 setTimeout(() => {
                     salesTbody.innerHTML = '';
                     studentsTbody.innerHTML = '';
-                    populateTablePage('sales-table', salesPage, 'bar-sales');
-                    populateTablePage('students-table', studentsPage, 'bar-students');
+                    populateTablePage('sales-table', salesPages[currentPageIndex], 'bar-sales');
+                    populateTablePage('students-table', studentsPages[currentPageIndex], 'bar-students');
                     salesTbody.classList.remove('fading');
                     studentsTbody.classList.remove('fading');
                 }, 400);
@@ -620,7 +559,6 @@
             }
         }
 
-
         function updateDateTime() {
             const now = new Date();
             const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long', hour: '2-digit', minute: '2-digit' };
@@ -628,8 +566,8 @@
         }
 
         window.onload = function() {
-            calculateTotalSalesSummary(); // 총 매출액 및 성장률 계산 및 표시
-            calculateTotalStudentsSummary(); // 총 원생 수 및 성장률 계산 및 표시
+            calculateTotalSalesSummary();
+            calculateTotalStudentsSummary();
             updateDateTime();
             setInterval(updateDateTime, 60000);
             runSlideshow();

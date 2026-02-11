@@ -202,7 +202,7 @@
         #clock-section.visible {
             opacity: 1;
             visibility: visible;
-            transform: scale(1); /* 1.9에서 1배로 수정 */
+            transform: scale(1);
         }
 
         .analog-clock {
@@ -263,13 +263,15 @@
 
                 <section class="current-summary-section">
                     <div class="summary-box">
-                        <h3>총 매출액 (01월 기준)</h3> <div class="summary-main-display" id="total-sales-summary">
+                        <h3>총 매출액 (01월 기준)</h3>
+                        <div class="summary-main-display" id="total-sales-summary">
                             <p class="summary-value">계산 중...</p>
                         </div>
                     </div>
                     
                     <div class="summary-box">
-                        <h3>총 원생수 (01월 기준)</h3> <div class="summary-main-display" id="total-students-summary">
+                        <h3>총 원생수 (01월 기준)</h3>
+                        <div class="summary-main-display" id="total-students-summary">
                             <p class="summary-value">계산 중...</p>
                         </div>
                     </div>
@@ -362,6 +364,22 @@
             { name: '일산중산점', current: 76, prev: 97 }
         ].sort((a, b) => b.current - a.current).map((item, index) => ({...item, rank: index + 1}));
 
+        // 슬라이드 데이터 분할 로직 (첫 페이지 3개, 나머지 4개)
+        function getCustomPages(data) {
+            const pages = [];
+            // 첫 번째 슬라이드 (3개)
+            pages.push(data.slice(0, 3));
+            // 나머지 (4개씩)
+            for (let i = 3; i < data.length; i += 4) {
+                pages.push(data.slice(i, i + 4));
+            }
+            return pages;
+        }
+
+        const salesPages = getCustomPages(salesData);
+        const studentsPages = getCustomPages(studentsData);
+        let currentPageIndex = 0;
+
         function calculateTotalSalesSummary() {
             const totalCurrentSales = salesData.reduce((sum, item) => sum + item.current, 0);
             const totalPrevSales = salesData.reduce((sum, item) => sum + item.prev, 0);
@@ -404,16 +422,6 @@
         const dateDisplay = document.getElementById('date-display');
         const digitalClockDisplay = document.getElementById('digital-clock-display');
         let clockUpdateInterval;
-
-        function chunkArray(array, size) {
-            const chunked_arr = [];
-            for (let i = 0; i < array.length; i += size) chunked_arr.push(array.slice(i, i + size));
-            return chunked_arr;
-        }
-
-        const salesPages = chunkArray(salesData, 4); 
-        const studentsPages = chunkArray(studentsData, 4); 
-        let currentPageIndex = 0;
 
         function populateTablePage(tableId, data, barClass) {
             if (!data) return;

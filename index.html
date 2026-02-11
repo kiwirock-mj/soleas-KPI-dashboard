@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soleas KPI Dashboard (Optimized for 120% Zoom)</title>
+    <title>Soleas KPI Dashboard (125% Optimized)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
@@ -27,33 +27,42 @@
             background-color: var(--bg-color);
             color: var(--text-primary);
             margin: 0;
-            /* 120% 확대 시 여백 확보를 위해 패딩 증가 */
-            padding: 40px 60px; 
+            /* 125% 확대 시 잘리지 않도록 상하 여백을 적절히 조절 */
+            padding: 20px 40px; 
             box-sizing: border-box;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            overflow-x: hidden; /* 가로 스크롤 방지 */
         }
 
         .scaler-wrapper {
             width: 100%;
-            max-width: 1600px; /* 확대 시 가로로 너무 퍼지지 않게 조정 */
-            position: relative;
+            max-width: 1700px;
+            margin: 0 auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .dashboard-container {
             display: flex;
             flex-direction: column;
             width: 100%;
-            gap: 20px;
+            height: 100%;
         }
 
-        .fixed-header { flex-shrink: 0; }
-        .content-area { flex-grow: 1; position: relative; min-height: 500px; }
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 0 15px 15px 15px; border-bottom: 1px solid var(--border-color); }
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding-bottom: 10px; 
+            border-bottom: 1px solid var(--border-color); 
+            margin-bottom: 15px;
+        }
 
         h1 {
-            font-size: 2.31rem;
+            font-size: 2.1rem; /* 폰트 소폭 축소 */
             color: var(--text-title);
             margin: 0;
             display: flex;
@@ -61,210 +70,112 @@
             gap: 15px;
         }
         .update-tag {
-            font-size: 1.26rem;
+            font-size: 1.1rem;
             color: var(--text-secondary);
-            font-weight: 500;
-            white-space: nowrap;
             margin-bottom: 3px;
         }
 
-        #datetime { font-size: 1.26rem; color: var(--text-secondary); font-weight: 500; }
+        #datetime { font-size: 1.1rem; color: var(--text-secondary); }
 
+        /* 섹션 간 간격 축소 */
         .cumulative-summary-section {
             display: flex;
             justify-content: center;
-            padding: 15px 0 10px 0;
+            margin-bottom: 10px;
         }
 
         .current-summary-section {
             display: flex;
             justify-content: center; 
-            padding: 10px 0 25px 0;
-            gap: 25px;
+            gap: 20px;
+            margin-bottom: 15px;
         }
 
         .summary-box {
             background-color: var(--card-color);
             text-align: center;
-            padding: 20px 30px; 
+            padding: 15px 20px; /* 패딩 축소 */
             border-radius: 12px;
             border: 1px solid var(--border-color);
             flex: 1; 
         }
 
         .cumulative-sales-box {
-            flex: 0 1 50%;
-            padding: 20px 40px;
+            flex: 0 1 40%;
             border: 2px solid var(--highlight-border);
         }
 
         .summary-box h3 { 
-            font-size: 1.155rem; 
+            font-size: 1rem; 
             color: var(--text-secondary); 
-            margin: 0 0 12px 0; 
-            font-weight: 500; 
-        }
-        
-        .summary-main-display {
-            display: flex;
-            justify-content: center;
-            align-items: baseline; 
-            gap: 15px; 
-            margin: 0; 
+            margin: 0 0 8px 0; 
         }
 
         .summary-box .summary-value {
-            font-size: 2.5rem; 
+            font-size: 2.1rem; 
             color: var(--text-title);
             font-weight: 700;
             margin: 0;
         }
-        
-        .growth-summary { 
-            display: flex; 
-            align-items: baseline; 
-            gap: 10px; 
-            font-weight: 700; 
-            margin: 0;
-        }
-        
-        .growth-summary .growth-percent { 
-            font-size: 1.6rem; 
-            font-weight: 700;
-        }
-        
-        .growth-summary .growth-delta { 
-            font-size: 1.3rem; 
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-
-        .growth-summary.increase { color: #f44336; } 
-        .growth-summary.decrease { color: #2196f3; } 
-        .growth-summary.equal { color: var(--text-secondary); } 
 
         .ranking-section { 
             display: flex; 
-            gap: 25px; 
-            transition: opacity 0.4s ease-in-out; 
+            gap: 20px; 
+            flex: 1; /* 남은 공간 모두 차지 */
         }
 
         .ranking-table-wrapper { 
             flex: 1; 
             background-color: var(--card-color); 
-            padding: 30px; 
+            padding: 15px 25px; 
             border-radius: 12px; 
             border: 1px solid var(--border-color); 
-            display: flex; 
-            flex-direction: column; 
         }
         
-        .ranking-table-wrapper h2 { font-size: 1.575rem; color: #f0f0f0; margin: 0 0 25px 0; text-align: left; }
+        .ranking-table-wrapper h2 { font-size: 1.4rem; color: #f0f0f0; margin: 0 0 15px 0; }
+        
         table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 18px 16px; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
-        th { font-weight: 700; color: var(--text-secondary); font-size: 1rem; }
+        /* 행 높이 조절하여 한 화면에 들어오게 함 */
+        th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
         
-        tbody { transition: opacity 0.4s ease-in-out; }
-        .fading { opacity: 0; }
+        .branch-name { font-size: 1.1rem; }
+        .bar-container { height: 26px; } /* 바 높이 소폭 축소 */
         
-        .branch-info { display: flex; flex-direction: column; }
-        .branch-name { font-size: 1.2rem; font-weight: 500; }
-        .growth-rate-container { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
-        
-        .bar-cell { position: relative; min-width: 250px; }
-        .bar-container { position: relative; height: 32px; background-color: #3a3a5e; border-radius: 5px; }
-        .bar { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; transition: width 0.5s ease-in-out; }
-        .bar-sales { background-color: var(--sales-bar); }
-        .bar-students { background-color: var(--students-bar); }
-        .prev-marker { position: absolute; top: -5px; bottom: -5px; width: 4px; border-radius: 2px; z-index: 5; }
-        
-        .value-label { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.9rem; color: var(--text-secondary); }
-        .current-value { font-weight: 700; color: var(--text-primary); }
-        
-        .rank-1 .branch-name { font-weight: 700; font-size: 1.5rem; color: #ffd700; }
-        .rank-2 .branch-name { font-weight: 700; font-size: 1.4rem; color: #c0c0c0; }
-        .rank-3 .branch-name { font-weight: 700; font-size: 1.3rem; color: #cd7f32; }
-
-        /* 시계 섹션 확대 시 위치 보정 */
-        #clock-section {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            width: 100%; height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 5%;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.5s ease-in-out;
-        }
+        /* 시계 모드 확대 보정 */
         #clock-section.visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translate(-50%, -50%) scale(1.6); /* 120% 확대 감안하여 스케일 약간 조정 */
+            transform: translate(-50%, -50%) scale(1.4); /* 125% 환경에 맞춰 스케일 재조정 */
         }
-
-        .analog-clock {
-            width: 300px; height: 300px;
-            border: 10px solid var(--card-color);
-            border-radius: 50%;
-            position: relative;
-            background-color: var(--bg-color);
-        }
-        .analog-clock .hand {
-            position: absolute;
-            bottom: 50%; left: 50%;
-            transform-origin: bottom;
-            background-color: var(--text-primary);
-            border-radius: 4px;
-        }
-        .analog-clock .hour-hand { width: 8px; height: 80px; }
-        .analog-clock .minute-hand { width: 6px; height: 110px; }
-        .analog-clock .second-hand { width: 3px; height: 130px; background-color: #f44336; }
-
-        .time-info {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            text-align: right;
-        }
-        #date-display { font-size: 2.2rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 10px;}
-        #digital-clock-display { font-size: 5.5rem; font-weight: 700; color: var(--text-title); }
     </style>
 </head>
 <body>
     <div class="scaler-wrapper">
         <div class="dashboard-container">
-            <div class="fixed-header">
-                <header class="header">
-                    <h1>Soleas KPI Dashboard <span class="update-tag">2026/02/02 집계 기준</span></h1>
-                    <div id="datetime"></div>
-                </header>
+            <header class="header">
+                <h1>Soleas KPI Dashboard <span class="update-tag">2026/02/02 집계 기준</span></h1>
+                <div id="datetime"></div>
+            </header>
 
-                <section class="cumulative-summary-section">
-                    <div class="summary-box cumulative-sales-box">
-                        <h3>26년 누적 총 매출액(1월)</h3>
-                        <p class="summary-value">592,091,739 원</p>
-                    </div>
-                </section>
+            <section class="cumulative-summary-section">
+                <div class="summary-box cumulative-sales-box">
+                    <h3>26년 누적 총 매출액(1월)</h3>
+                    <p class="summary-value">592,091,739 원</p>
+                </div>
+            </section>
 
-                <section class="current-summary-section">
-                    <div class="summary-box">
-                        <h3>총 매출액 (01월 기준)</h3>
-                        <div class="summary-main-display" id="total-sales-summary">
-                            <p class="summary-value">계산 중...</p>
-                        </div>
+            <section class="current-summary-section">
+                <div class="summary-box">
+                    <h3>총 매출액 (01월 기준)</h3>
+                    <div class="summary-main-display" id="total-sales-summary">
+                        <p class="summary-value">계산 중...</p>
                     </div>
-                    
-                    <div class="summary-box">
-                        <h3>총 원생수 (01월 기준)</h3>
-                        <div class="summary-main-display" id="total-students-summary">
-                            <p class="summary-value">계산 중...</p>
-                        </div>
+                </div>
+                <div class="summary-box">
+                    <h3>총 원생수 (01월 기준)</h3>
+                    <div class="summary-main-display" id="total-students-summary">
+                        <p class="summary-value">계산 중...</p>
                     </div>
-                </section>
-            </div>
+                </div>
+            </section>
 
             <div class="content-area">
                 <section class="ranking-section">
@@ -293,213 +204,5 @@
             </div>
         </div>
     </div>
-    <script>
-        /* 데이터 및 로직은 기존과 동일하게 유지 (광주봉선점 등 데이터 생략, 실제 파일의 스크립트 그대로 삽입) */
-        const salesData = [
-            { name: '광주봉선점', current: 53110131, prev: 56834930 },
-            { name: '부천신중동점', current: 38590682, prev: 38146932 },
-            { name: '광주풍암점', current: 36510682, prev: 36109498 },
-            { name: '수원광교점', current: 35168500, prev: 35473500 },
-            { name: '동탄역점', current: 34525900, prev: 28957500 },
-            { name: '광주수완점', current: 34500608, prev: 37065400 },
-            { name: '분당판교점', current: 32912448, prev: 32960098 },
-            { name: '송파잠실점', current: 28754200, prev: 28784700 },
-            { name: '부천상동점', current: 24705000, prev: 27402500 },
-            { name: '천안불당점', current: 24297500, prev: 23479800 },
-            { name: '수원영통점', current: 23197332, prev: 23920666 },
-            { name: '시흥은계점', current: 21775533, prev: 21714833 },
-            { name: '광명철산점', current: 20537500, prev: 18210750 },
-            { name: '노원중계점', current: 20103375, prev: 16940200 },
-            { name: '안성시청점', current: 20009500, prev: 23074500 },
-            { name: '논산내동점', current: 15877032, prev: 15070031 },
-            { name: '안산고잔점', current: 15573632, prev: 18530595 },
-            { name: '대구달서점', current: 14325000, prev: 14486250 },
-            { name: '김포시청점', current: 14152500, prev: 12462400 },
-            { name: '포항장성점', current: 13210040, prev: 10717040 },
-            { name: '부평삼산점', current: 13085500, prev: 13474000 },
-            { name: '시흥목감점', current: 12313950, prev: 13118450 },
-            { name: '분당오리점', current: 11998328, prev: 12321039 },
-            { name: '송파문정점', current: 11627700, prev: 9653700 },
-            { name: '청라국제도시점', current: 10983000, prev: 11247500 },
-            { name: '일산중산점', current: 10246166, prev: 12986666 }
-        ].sort((a, b) => b.current - a.current).map((item, index) => ({...item, rank: index + 1}));
-
-        const studentsData = [
-            { name: '광주봉선점', current: 383, prev: 406 },
-            { name: '광주수완점', current: 293, prev: 309 },
-            { name: '수원광교점', current: 279, prev: 284 },
-            { name: '분당판교점', current: 267, prev: 267 },
-            { name: '광주풍암점', current: 254, prev: 258 },
-            { name: '동탄역점', current: 250, prev: 231 },
-            { name: '부천신중동점', current: 246, prev: 255 },
-            { name: '송파잠실점', current: 192, prev: 187 },
-            { name: '부천상동점', current: 180, prev: 191 },
-            { name: '수원영통점', current: 177, prev: 188 },
-            { name: '광명철산점', current: 157, prev: 143 },
-            { name: '천안불당점', current: 157, prev: 158 },
-            { name: '안성시청점', current: 152, prev: 166 },
-            { name: '시흥은계점', current: 145, prev: 147 },
-            { name: '노원중계점', current: 138, prev: 121 },
-            { name: '논산내동점', current: 127, prev: 121 },
-            { name: '안산고잔점', current: 113, prev: 122 },
-            { name: '분당오리점', current: 105, prev: 107 },
-            { name: '김포시청점', current: 99, prev: 89 },
-            { name: '부평삼산점', current: 95, prev: 95 },
-            { name: '대구달서점', current: 89, prev: 97 },
-            { name: '청라국제도시점', current: 88, prev: 95 },
-            { name: '송파문정점', current: 87, prev: 61 },
-            { name: '시흥목감점', current: 86, prev: 92 },
-            { name: '포항장성점', current: 85, prev: 77 },
-            { name: '일산중산점', current: 76, prev: 97 }
-        ].sort((a, b) => b.current - a.current).map((item, index) => ({...item, rank: index + 1}));
-
-        function calculateTotalSalesSummary() {
-            const totalCurrentSales = salesData.reduce((sum, item) => sum + item.current, 0);
-            const totalPrevSales = salesData.reduce((sum, item) => sum + item.prev, 0);
-            const salesDelta = totalCurrentSales - totalPrevSales;
-            const salesGrowthRate = (totalPrevSales === 0) ? 0 : (salesDelta / totalPrevSales) * 100;
-            const isIncrease = salesDelta >= 0;
-            const summaryElement = document.getElementById('total-sales-summary');
-            summaryElement.innerHTML = `<p class="summary-value">${totalCurrentSales.toLocaleString()} 원</p><div class="growth-summary ${isIncrease ? (salesDelta === 0 ? 'equal' : 'increase') : 'decrease'}"><span class="growth-percent">${isIncrease ? (salesDelta === 0 ? '' : '▲') : '▼'}${Math.abs(salesGrowthRate).toFixed(2)}%</span><span class="growth-delta">(${salesDelta >= 0 ? (salesDelta === 0 ? '0' : `+${salesDelta.toLocaleString()}`) : salesDelta.toLocaleString()} 원)</span></div>`;
-        }
-
-        function calculateTotalStudentsSummary() {
-            const totalCurrentStudents = studentsData.reduce((sum, item) => sum + item.current, 0);
-            const totalPrevStudents = studentsData.reduce((sum, item) => sum + item.prev, 0);
-            const studentsDelta = totalCurrentStudents - totalPrevStudents;
-            const studentsGrowthRate = (totalPrevStudents === 0) ? 0 : (studentsDelta / totalPrevStudents) * 100;
-            const isIncrease = studentsDelta >= 0;
-            const summaryElement = document.getElementById('total-students-summary');
-            summaryElement.innerHTML = `<p class="summary-value">${totalCurrentStudents.toLocaleString()} 명</p><div class="growth-summary ${isIncrease ? (studentsDelta === 0 ? 'equal' : 'increase') : 'decrease'}"><span class="growth-percent">${isIncrease ? (studentsDelta === 0 ? '' : '▲') : '▼'}${Math.abs(studentsGrowthRate).toFixed(2)}%</span><span class="growth-delta">(${studentsDelta >= 0 ? (studentsDelta === 0 ? '0' : `+${studentsDelta.toLocaleString()}`) : studentsDelta.toLocaleString()} 명)</span></div>`;
-        }
-
-        const rankingSection = document.querySelector('.ranking-section');
-        const clockSection = document.getElementById('clock-section');
-        const hourHand = document.getElementById('hour-hand');
-        const minuteHand = document.getElementById('minute-hand');
-        const secondHand = document.getElementById('second-hand');
-        const dateDisplay = document.getElementById('date-display');
-        const digitalClockDisplay = document.getElementById('digital-clock-display');
-        let clockUpdateInterval;
-
-        function chunkArray(array, size) {
-            const chunked_arr = [];
-            for (let i = 0; i < array.length; i += size) chunked_arr.push(array.slice(i, i + size));
-            return chunked_arr;
-        }
-
-        const salesPages = chunkArray(salesData, 4); 
-        const studentsPages = chunkArray(studentsData, 4); 
-        let currentPageIndex = 0;
-
-        function populateTablePage(tableId, data, barClass) {
-            if (!data) return;
-            const tableBody = document.querySelector(`#${tableId} tbody`);
-            const maxVal = Math.max(...(tableId === 'sales-table' ? salesData : studentsData).map(d => d.current));
-            const unit = tableId === 'sales-table' ? '원' : '명';
-            const medals = ['🥇', '🥈', '🥉'];
-
-            data.forEach(item => {
-                const isIncrease = item.current > item.prev;
-                const isNew = item.prev === 0 && item.current > 0;
-                const isSame = item.current === item.prev;
-                let growthPercentageText, growthDeltaText, changeClass;
-
-                if (isNew) {
-                    growthPercentageText = 'New';
-                    growthDeltaText = `+${item.current.toLocaleString()} ${unit}`;
-                    changeClass = 'increase';
-                } else if (isSame) {
-                    growthPercentageText = '0.0%';
-                    growthDeltaText = `0 ${unit}`;
-                    changeClass = 'equal-change';
-                } else {
-                    const growthPercentage = ((item.current - item.prev) / item.prev) * 100;
-                    const growthDelta = item.current - item.prev;
-                    growthPercentageText = `${isIncrease ? '▲' : '▼'}${Math.abs(growthPercentage).toFixed(2)}%`;
-                    growthDeltaText = growthDelta >= 0 ? `+${growthDelta.toLocaleString()} ${unit}` : `${growthDelta.toLocaleString()} ${unit}`;
-                    changeClass = isIncrease ? 'increase' : 'decrease';
-                }
-
-                const row = document.createElement('tr');
-                if (item.rank <= 3) row.classList.add(`rank-${item.rank}`);
-                const medal = item.rank <= 3 ? medals[item.rank - 1] : '';
-
-                row.innerHTML = `<td>${item.rank}</td><td><div class="branch-info"><span class="branch-name">${medal} ${item.name}</span><div class="growth-rate-container"><span class="growth-percentage ${changeClass}">${growthPercentageText}</span><span class="growth-delta ${changeClass}">(${growthDeltaText})</span></div></div></td><td class="bar-cell"><div class="bar-container"><div class="bar ${barClass}" style="width: ${(item.current / maxVal) * 100}%"></div><div class="prev-marker ${changeClass}" style="left: ${(item.prev / maxVal) * 100}%"></div></div><div class="value-label"><span>전월: ${item.prev.toLocaleString()} ${unit}</span><span class="current-value">당월: ${item.current.toLocaleString()} ${unit}</span></div></td>`;
-                tableBody.appendChild(row);
-            });
-        }
-
-        function updateClocks() {
-            const now = new Date();
-            const seconds = now.getSeconds();
-            const minutes = now.getMinutes();
-            let hours = now.getHours();
-            const ampmHours = hours % 12 || 12;
-            secondHand.style.transform = `rotate(${(seconds / 60) * 360}deg)`;
-            minuteHand.style.transform = `rotate(${(minutes / 60) * 360 + (seconds / 60) * 6}deg)`;
-            hourHand.style.transform = `rotate(${(ampmHours / 12) * 360 + (minutes / 60) * 30}deg)`;
-            dateDisplay.textContent = now.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
-            digitalClockDisplay.textContent = now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
-        }
-
-        function showClock() {
-            rankingSection.classList.add('fading');
-            setTimeout(() => {
-                rankingSection.style.display = 'none';
-                clockSection.classList.add('visible');
-                updateClocks();
-                clockUpdateInterval = setInterval(updateClocks, 1000);
-                setTimeout(hideClockAndRestart, 5000);
-            }, 500);
-        }
-
-        function hideClockAndRestart() {
-            clearInterval(clockUpdateInterval);
-            clockSection.classList.remove('visible');
-            setTimeout(() => {
-                rankingSection.style.display = 'flex';
-                setTimeout(() => rankingSection.classList.remove('fading'), 50);
-                currentPageIndex = 0;
-                runSlideshow();
-            }, 500);
-        }
-
-        function runSlideshow() {
-            const maxPages = Math.max(salesPages.length, studentsPages.length); 
-            if (currentPageIndex < maxPages) {
-                const salesTbody = document.querySelector('#sales-table tbody');
-                const studentsTbody = document.querySelector('#students-table tbody');
-                salesTbody.classList.add('fading');
-                studentsTbody.classList.add('fading');
-                setTimeout(() => {
-                    salesTbody.innerHTML = '';
-                    studentsTbody.innerHTML = '';
-                    populateTablePage('sales-table', salesPages[currentPageIndex], 'bar-sales');
-                    populateTablePage('students-table', studentsPages[currentPageIndex], 'bar-students');
-                    salesTbody.classList.remove('fading');
-                    studentsTbody.classList.remove('fading');
-                    currentPageIndex++;
-                    setTimeout(runSlideshow, 10000);
-                }, 400);
-            } else {
-                showClock(); 
-            }
-        }
-
-        function updateDateTime() {
-            const now = new Date();
-            const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long', hour: '2-digit', minute: '2-digit' };
-            document.getElementById('datetime').textContent = now.toLocaleDateString('ko-KR', options);
-        }
-
-        window.onload = function() {
-            calculateTotalSalesSummary();
-            calculateTotalStudentsSummary();
-            updateDateTime();
-            setInterval(updateDateTime, 60000);
-            runSlideshow(); 
-        };
-    </script>
-</body>
+    </body>
 </html>

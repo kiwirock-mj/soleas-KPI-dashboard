@@ -202,7 +202,7 @@
         #clock-section.visible {
             opacity: 1;
             visibility: visible;
-            transform: scale(1.9);
+            transform: scale(1); /* 1.9에서 1배로 수정 */
         }
 
         .analog-clock {
@@ -263,15 +263,13 @@
 
                 <section class="current-summary-section">
                     <div class="summary-box">
-                        <h3>총 매출액 (당월 기준)</h3>
-                        <div class="summary-main-display" id="total-sales-summary">
+                        <h3>총 매출액 (01월 기준)</h3> <div class="summary-main-display" id="total-sales-summary">
                             <p class="summary-value">계산 중...</p>
                         </div>
                     </div>
                     
                     <div class="summary-box">
-                        <h3>총 원생수 (당월 기준)</h3>
-                        <div class="summary-main-display" id="total-students-summary">
+                        <h3>총 원생수 (01월 기준)</h3> <div class="summary-main-display" id="total-students-summary">
                             <p class="summary-value">계산 중...</p>
                         </div>
                     </div>

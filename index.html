@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soleas KPI Dashboard (26년 1분기 누적 반영)</title>
+    <title>Soleas KPI Dashboard (26년 4월 누적 반영)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
         :root {
@@ -96,27 +96,27 @@
         <div class="dashboard-container">
             <div class="fixed-header">
                 <header class="header">
-                    <h1>Soleas KPI Dashboard <span class="update-tag">2026/04/06 집계 기준</span></h1>
+                    <h1>Soleas KPI Dashboard <span class="update-tag">2026/05/01 집계 기준</span></h1>
                     <div id="datetime"></div>
                 </header>
 
                 <section class="cumulative-summary-section">
                     <div class="summary-box cumulative-sales-box">
-                        <h3>26년 누적 총 매출액 (1월~3월)</h3>
+                        <h3>26년 누적 총 매출액 (1월~4월)</h3>
                         <p class="summary-value" id="accumulated-total">계산 중...</p>
                     </div>
                 </section>
 
                 <section class="current-summary-section">
                     <div class="summary-box">
-                        <h3>총 매출액 (03월 기준)</h3>
+                        <h3>총 매출액 (04월 기준)</h3>
                         <div class="summary-main-display" id="total-sales-summary">
                             <p class="summary-value">계산 중...</p>
                         </div>
                     </div>
                     
                     <div class="summary-box">
-                        <h3>총 원생수 (03월 기준)</h3>
+                        <h3>총 원생수 (04월 기준)</h3>
                         <div class="summary-main-display" id="total-students-summary">
                             <p class="summary-value">계산 중...</p>
                         </div>
@@ -153,89 +153,82 @@
     </div>
 
     <script>
-        // 지점별 매출 데이터 (김해장유점 제외)
+        // 지점별 매출 데이터 (이전 대화 반영)
         const salesData = [
-            { name: '광주봉선점', current: 56729515, prev: 52159865 },
-            { name: '수원광교점', current: 38694437, prev: 34482422 },
-            { name: '분당판교점', current: 38272650, prev: 27482365 },
-            { name: '광주풍암점', current: 38162600, prev: 34523100 },
-            { name: '부천신중동점', current: 37997497, prev: 35664998 },
-            { name: '동탄역점', current: 37622563, prev: 34547900 },
-            { name: '광주수완점', current: 33346396, prev: 32662083 },
-            { name: '송파잠실점', current: 28947200, prev: 27314700 },
-            { name: '부천상동점', current: 26680500, prev: 23801000 },
-            { name: '노원중계점', current: 25269350, prev: 21541600 },
-            { name: '시흥은계점', current: 25177965, prev: 24761565 },
-            { name: '천안불당점', current: 24908816, prev: 19772500 },
-            { name: '광명철산점', current: 22654500, prev: 19531000 },
-            { name: '수원영통점', current: 21361321, prev: 21642166 },
-            { name: '안성시청점', current: 21339166, prev: 19112500 },
-            { name: '다산신도시점', current: 19560550, prev: 0 },
-            { name: '안산고잔점', current: 17316430, prev: 16724532 },
-            { name: '대구달서점', current: 16641000, prev: 13645000 },
-            { name: '송파문정점', current: 15371147, prev: 11335766 },
-            { name: '논산내동점', current: 14826832, prev: 14392032 },
-            { name: '김포시청점', current: 14340750, prev: 12581000 },
-            { name: '시흥목감점', current: 14075900, prev: 11887100 },
-            { name: '포항장성점', current: 14066540, prev: 14094040 },
-            { name: '분당오리점', current: 13444661, prev: 11054744 },
-            { name: '부평삼산점', current: 13430500, prev: 13006500 },
-            { name: '대전도안점', current: 8206250, prev: 10656000 },
-            { name: '일산중산점', current: 4669000, prev: 8074166 },
-            { name: '청라국제도시점', current: 0, prev: 7202000 }
+            { name: '광주봉선점', prev: 56729515, current: 56820948 },
+            { name: '수원광교점', prev: 38694437, current: 43923062 },
+            { name: '동탄역점', prev: 37622563, current: 40583645 },
+            { name: '부천신중동점', prev: 37997497, current: 37074997 },
+            { name: '광주풍암점', prev: 38162600, current: 36771100 },
+            { name: '분당판교점', prev: 38272650, current: 35629374 },
+            { name: '광주수완점', prev: 33346396, current: 35522200 },
+            { name: '송파잠실점', prev: 28947200, current: 28156700 },
+            { name: '노원중계점', prev: 25269350, current: 27988850 },
+            { name: '광명철산점', prev: 22654500, current: 26540750 },
+            { name: '부천상동점', prev: 26680500, current: 26095500 },
+            { name: '시흥은계점', prev: 25177965, current: 25415465 },
+            { name: '천안불당점', prev: 24908816, current: 22160166 },
+            { name: '안성시청점', prev: 21339166, current: 22003876 },
+            { name: '수원영통점', prev: 21361321, current: 21347154 },
+            { name: '다산신도시점', prev: 19560550, current: 19432916 },
+            { name: '대구달서점', prev: 16641000, current: 19030000 },
+            { name: '안산고잔점', prev: 17316430, current: 17759296 },
+            { name: '송파문정점', prev: 15371147, current: 16651647 },
+            { name: '부평삼산점', prev: 13430500, current: 14896500 },
+            { name: '논산내동점', prev: 14826832, current: 13979499 },
+            { name: '시흥목감점', prev: 14075900, current: 13854900 },
+            { name: '포항장성점', prev: 14066540, current: 13714573 },
+            { name: '김포시청점', prev: 14340750, current: 13682000 },
+            { name: '분당오리점', prev: 13444661, current: 13530164 },
+            { name: '대전도안점', prev: 8206250, current: 10445500 },
+            { name: '일산중산점', prev: 4669000, current: 6823500 }
         ].sort((a, b) => b.current - a.current).map((item, index) => ({...item, rank: index + 1}));
 
-        // 지점별 원생 수 데이터 (김해장유점 제외)
+        // 지점별 원생 수 데이터 (이미지 기반 업데이트: 3월=prev, 4월=current)
         const studentsData = [
-            { name: '광주봉선점', current: 401, prev: 363 },
-            { name: '수원광교점', current: 276, prev: 278 },
-            { name: '광주수완점', current: 275, prev: 263 },
-            { name: '분당판교점', current: 274, prev: 225 },
-            { name: '동탄역점', current: 255, prev: 253 },
-            { name: '광주풍암점', current: 252, prev: 230 },
-            { name: '부천신중동점', current: 240, prev: 224 },
-            { name: '송파잠실점', current: 200, prev: 179 },
-            { name: '광명철산점', current: 179, prev: 152 },
-            { name: '부천상동점', current: 178, prev: 165 },
-            { name: '노원중계점', current: 170, prev: 148 },
-            { name: '수원영통점', current: 151, prev: 163 },
-            { name: '천안불당점', current: 145, prev: 139 },
-            { name: '안성시청점', current: 144, prev: 144 },
-            { name: '시흥은계점', current: 140, prev: 143 },
-            { name: '다산신도시점', current: 127, prev: 0 },
-            { name: '논산내동점', current: 120, prev: 120 },
-            { name: '안산고잔점', current: 117, prev: 111 },
-            { name: '송파문정점', current: 115, prev: 95 },
-            { name: '분당오리점', current: 110, prev: 95 },
-            { name: '대구달서점', current: 109, prev: 83 },
-            { name: '포항장성점', current: 102, prev: 93 },
-            { name: '부평삼산점', current: 97, prev: 93 },
-            { name: '김포시청점', current: 94, prev: 89 },
-            { name: '시흥목감점', current: 85, prev: 82 },
-            { name: '대전도안점', current: 64, prev: 67 },
-            { name: '일산중산점', current: 46, prev: 61 },
-            { name: '청라국제도시점', current: 0, prev: 59 }
+            { name: '시흥은계점', prev: 140, current: 141 },
+            { name: '부천신중동점', prev: 240, current: 231 },
+            { name: '부천상동점', prev: 178, current: 180 },
+            { name: '안산고잔점', prev: 117, current: 121 },
+            { name: '일산중산점', prev: 46, current: 52 },
+            { name: '시흥목감점', prev: 85, current: 88 },
+            { name: '분당오리점', prev: 110, current: 110 },
+            { name: '논산내동점', prev: 120, current: 115 },
+            { name: '광주풍암점', prev: 252, current: 248 },
+            { name: '수원광교점', prev: 276, current: 292 },
+            { name: '부평삼산점', prev: 97, current: 111 },
+            { name: '수원영통점', prev: 151, current: 156 },
+            { name: '안성시청점', prev: 144, current: 151 },
+            { name: '광주수완점', prev: 275, current: 287 },
+            { name: '광주봉선점', prev: 401, current: 396 },
+            { name: '분당판교점', prev: 274, current: 280 },
+            { name: '대구달서점', prev: 109, current: 121 },
+            { name: '천안불당점', prev: 145, current: 152 },
+            { name: '송파잠실점', prev: 200, current: 195 },
+            { name: '김포시청점', prev: 94, current: 111 },
+            { name: '동탄역점', prev: 255, current: 284 },
+            { name: '광명철산점', prev: 179, current: 209 },
+            { name: '포항장성점', prev: 102, current: 105 },
+            { name: '노원중계점', prev: 170, current: 195 },
+            { name: '송파문정점', prev: 115, current: 121 },
+            { name: '대전도안점', prev: 64, current: 71 },
+            { name: '다산신도시점', prev: 127, current: 128 }
         ].sort((a, b) => b.current - a.current).map((item, index) => ({...item, rank: index + 1}));
 
         function calculateTotalSalesSummary() {
-            // 개별 지점 합계 계산 (데이터 검증용)
             const totalCurrentSales = salesData.reduce((sum, item) => sum + item.current, 0);
+            const janToMarSales = 1809404669; 
+            const accumulatedTotal = janToMarSales + totalCurrentSales;
+            document.getElementById('accumulated-total').textContent = accumulatedTotal.toLocaleString() + " 원";
+
             const totalPrevSales = salesData.reduce((sum, item) => sum + item.prev, 0);
             const salesDelta = totalCurrentSales - totalPrevSales;
             const salesGrowthRate = (totalPrevSales === 0) ? 0 : (salesDelta / totalPrevSales) * 100;
             const isIncrease = salesDelta >= 0;
-            
-            // 2026년 1분기 확정 데이터 반영
-            const janSales = 592637989;
-            const febSales = 573652644;
-            const marSales = 643114036; // 요청하신 3월 확정 매출액
-            const accumulatedTotal = janSales + febSales + marSales; // 1,809,404,669 원
-
-            document.getElementById('accumulated-total').textContent = accumulatedTotal.toLocaleString() + " 원";
 
             const summaryElement = document.getElementById('total-sales-summary');
             summaryElement.innerHTML = `
-                <p class="summary-value">${marSales.toLocaleString()} 원</p>
+                <p class="summary-value">${totalCurrentSales.toLocaleString()} 원</p>
                 <div class="growth-summary ${isIncrease ? (salesDelta === 0 ? 'equal' : 'increase') : 'decrease'}">
                     <span class="growth-percent">${isIncrease ? (salesDelta === 0 ? '' : '▲') : '▼'}${Math.abs(salesGrowthRate).toFixed(2)}%</span>
                     <span class="growth-delta">(${salesDelta >= 0 ? (salesDelta === 0 ? '0' : `+${salesDelta.toLocaleString()}`) : salesDelta.toLocaleString()} 원)</span>
@@ -275,18 +268,17 @@
         function populateTablePage(tableId, data, barClass) {
             if (!data) return;
             const tableBody = document.querySelector(`#${tableId} tbody`);
-            const maxVal = Math.max(...(tableId === 'sales-table' ? salesData : studentsData).map(d => d.current), 1);
+            const totalData = tableId === 'sales-table' ? salesData : studentsData;
+            const maxVal = Math.max(...totalData.map(d => Math.max(d.current, d.prev)), 1);
             const unit = tableId === 'sales-table' ? '원' : '명';
             const medals = ['🥇', '🥈', '🥉'];
 
             data.forEach(item => {
                 const isIncrease = item.current > item.prev;
-                const isNew = item.prev === 0 && item.current > 0;
                 const isSame = item.current === item.prev;
                 let growthPercentageText, growthDeltaText, changeClass;
                 
-                if (isNew) { growthPercentageText = 'New'; growthDeltaText = `+${item.current.toLocaleString()} ${unit}`; changeClass = 'increase'; }
-                else if (isSame) { growthPercentageText = '0.0%'; growthDeltaText = `0 ${unit}`; changeClass = 'equal-change'; }
+                if (isSame) { growthPercentageText = '0.0%'; growthDeltaText = `0 ${unit}`; changeClass = 'equal-change'; }
                 else {
                     const growthPercentage = ((item.current - item.prev) / item.prev) * 100;
                     const growthDelta = item.current - item.prev;

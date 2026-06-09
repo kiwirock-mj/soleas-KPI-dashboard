@@ -68,9 +68,16 @@
         .prev-marker.decrease { background-color: var(--prev-marker-decrease-color); }
         .value-label { display: flex; justify-content: space-between; margin-top: 5px; font-size: 0.84rem; color: var(--text-secondary); }
         .current-value { font-weight: 700; color: var(--text-primary); }
-        .rank-1 .branch-name { color: #ffd700; font-weight: 700; }
-        .rank-2 .branch-name { color: #c0c0c0; font-weight: 700; }
-        .rank-3 .branch-name { color: #cd7f32; font-weight: 700; }
+.rank-1 .branch-name,
+.rank-2 .branch-name,
+.rank-3 .branch-name {
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.rank-1 .branch-name { color: #ffd700; }
+.rank-2 .branch-name { color: #c0c0c0; }
+.rank-3 .branch-name { color: #cd7f32; }
         #clock-section { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; gap: 5%; opacity: 0; visibility: hidden; transition: opacity 0.5s; }
         #clock-section.visible { opacity: 1; visibility: visible; }
         .analog-clock { width: 350px; height: 350px; border: 10px solid var(--card-color); border-radius: 50%; position: relative; background-color: var(--bg-color); }

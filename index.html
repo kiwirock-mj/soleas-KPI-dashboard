@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soleas KPI Dashboard (26년 5월 마감 기준)</title>
+    <title>Soleas KPI Dashboard (26년 6월 마감 기준)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
         :root {
@@ -68,23 +68,19 @@
         .prev-marker.decrease { background-color: var(--prev-marker-decrease-color); }
         .value-label { display: flex; justify-content: space-between; margin-top: 5px; font-size: 0.84rem; color: var(--text-secondary); }
         .current-value { font-weight: 700; color: var(--text-primary); }
-.rank-1 .branch-name,
-.rank-2 .branch-name,
-.rank-3 .branch-name {
-    font-size: 1.6 rem;
-    font-weight: 700;
-}
-
-.rank-1 .branch-name { color: #ffd700; }
-.rank-2 .branch-name { color: #c0c0c0; }
-.rank-3 .branch-name { color: #cd7f32; }
+        .rank-1 .branch-name,
+        .rank-2 .branch-name,
+        .rank-3 .branch-name { font-size: 1.6rem; font-weight: 700; }
+        .rank-1 .branch-name { color: #ffd700; }
+        .rank-2 .branch-name { color: #c0c0c0; }
+        .rank-3 .branch-name { color: #cd7f32; }
         #clock-section { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; gap: 5%; opacity: 0; visibility: hidden; transition: opacity 0.5s; }
         #clock-section.visible { opacity: 1; visibility: visible; }
         .analog-clock { width: 350px; height: 350px; border: 10px solid var(--card-color); border-radius: 50%; position: relative; background-color: var(--bg-color); }
         .analog-clock .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background-color: var(--text-primary); border-radius: 4px; }
-        .analog-clock .hour-hand { width: 8px; height: 90px; }
-        .analog-clock .minute-hand { width: 6px; height: 120px; }
-        .analog-clock .second-hand { width: 3px; height: 140px; background-color: #f44336; }
+        .analog-clock .hand.hour-hand { width: 8px; height: 90px; }
+        .analog-clock .hand.minute-hand { width: 6px; height: 120px; }
+        .analog-clock .hand.second-hand { width: 3px; height: 140px; background-color: #f44336; }
         .time-info { text-align: right; }
         #digital-clock-display { font-size: 6rem; font-weight: 700; }
     </style>
@@ -94,22 +90,22 @@
         <div class="dashboard-container">
             <div class="fixed-header">
                 <header class="header">
-                    <h1>Soleas KPI Dashboard <span class="update-tag">2026/06/05 집계 기준</span></h1>
+                    <h1>Soleas KPI Dashboard <span class="update-tag">2026/07/13 집계 기준</span></h1>
                     <div id="datetime"></div>
                 </header>
                 <section class="cumulative-summary-section">
                     <div class="summary-box cumulative-sales-box">
-                        <h3>26년 누적 총 매출액 (1월~5월)</h3>
+                        <h3>26년 누적 총 매출액 (1월~6월)</h3>
                         <p class="summary-value" id="accumulated-total">3,092,400,667 원</p>
                     </div>
                 </section>
                 <section class="current-summary-section">
                     <div class="summary-box">
-                        <h3>총 매출액 (05월 기준)</h3>
+                        <h3>총 매출액 (당월 기준)</h3>
                         <div class="summary-main-display" id="total-sales-summary"></div>
                     </div>
                     <div class="summary-box">
-                        <h3>총 원생수 (05월 기준)</h3>
+                        <h3>총 원생수 (당월 기준)</h3>
                         <div class="summary-main-display" id="total-students-summary"></div>
                     </div>
                 </section>
@@ -141,40 +137,39 @@
     </div>
     <script>
         const salesData = [
-            { name: '부천신중동점', prev: 37074997, current: 0 }, { name: '시흥은계점', prev: 25415465, current: 26512232 },
-            { name: '부천상동점', prev: 26095500, current: 25293500 }, { name: '안산고잔점', prev: 17759296, current: 18677729 },
-            { name: '일산중산점', prev: 6823500, current: 7578000 }, { name: '시흥목감점', prev: 13854900, current: 13845500 },
-            { name: '분당오리점', prev: 13530164, current: 13578998 }, { name: '논산내동점', prev: 13979499, current: 14924249 },
-            { name: '광주풍암점', prev: 36771100, current: 36859600 }, { name: '수원광교점', prev: 43923062, current: 41172230 },
-            { name: '부평삼산점', prev: 14896500, current: 14369000 }, { name: '수원영통점', prev: 21347154, current: 23185488 },
-            { name: '안성시청점', prev: 22003876, current: 21133416 }, { name: '광주수완점', prev: 35522200, current: 35644200 },
-            { name: '광주봉선점', prev: 56820948, current: 52749781 }, { name: '분당판교점', prev: 35629374, current: 37548470 },
-            { name: '대구달서점', prev: 19030000, current: 18484750 }, { name: '천안불당점', prev: 22160166, current: 22147166 },
-            { name: '송파잠실점', prev: 28156700, current: 29059200 }, { name: '김포시청점', prev: 13682000, current: 16012266 },
-            { name: '동탄역점', prev: 40583645, current: 41378545 }, { name: '광명철산점', prev: 26540750, current: 27842400 },
-            { name: '포항장성점', prev: 13714573, current: 12698783 }, { name: '노원중계점', prev: 27988850, current: 29294650 },
-            { name: '송파문정점', prev: 16651647, current: 16759647 }, { name: '대전도안점', prev: 10445500, current: 11907000 },
-            { name: '다산신도시점', prev: 19432916, current: 15746916 }
+            { name: '시흥은계점', prev: 26512232, current: 25348732 }, { name: '부천상동점', prev: 25293500, current: 26072000 },
+            { name: '안산고잔점', prev: 18677729, current: 18761400 }, { name: '일산중산점', prev: 7578000, current: 5920000 },
+            { name: '시흥목감점', prev: 13845500, current: 14304400 }, { name: '분당오리점', prev: 13578998, current: 10623665 },
+            { name: '논산내동점', prev: 14924249, current: 16659833 }, { name: '광주풍암점', prev: 36859600, current: 35406800 },
+            { name: '수원광교점', prev: 41172230, current: 41601396 }, { name: '부평삼산점', prev: 14369000, current: 15833500 },
+            { name: '수원영통점', prev: 23185488, current: 21510666 }, { name: '안성시청점', prev: 21133416, current: 23410500 },
+            { name: '광주수완점', prev: 35644200, current: 37656700 }, { name: '광주봉선점', prev: 52749781, current: 54206515 },
+            { name: '분당판교점', prev: 37548470, current: 42036019 }, { name: '대구달서점', prev: 18484750, current: 18482000 },
+            { name: '천안불당점', prev: 22147166, current: 23193500 }, { name: '송파잠실점', prev: 29059200, current: 36888200 },
+            { name: '김포시청점', prev: 16012266, current: 16436766 }, { name: '동탄역점', prev: 41378545, current: 42806566 },
+            { name: '광명철산점', prev: 27842400, current: 29368150 }, { name: '포항장성점', prev: 12698783, current: 12884033 },
+            { name: '노원중계점', prev: 29294650, current: 28387700 }, { name: '송파문정점', prev: 16759647, current: 19768181 },
+            { name: '대전도안점', prev: 11907000, current: 12655750 }, { name: '다산신도시점', prev: 15746916, current: 18570416 },
+            { name: '부천신중동점', prev: 37074997, current: 0 }
         ].sort((a, b) => b.current - a.current).map((item, index) => ({...item, rank: index + 1}));
 
         const studentsData = [
-            { name: '부천신중동점', prev: 231, current: 0 }, { name: '시흥은계점', prev: 141, current: 147 },
-            { name: '부천상동점', prev: 180, current: 169 }, { name: '안산고잔점', prev: 121, current: 129 },
-            { name: '일산중산점', prev: 52, current: 59 }, { name: '시흥목감점', prev: 88, current: 84 },
-            { name: '분당오리점', prev: 110, current: 110 }, { name: '논산내동점', prev: 115, current: 119 },
-            { name: '광주풍암점', prev: 248, current: 252 }, { name: '수원광교점', prev: 292, current: 275 },
-            { name: '부평삼산점', prev: 111, current: 106 }, { name: '수원영통점', prev: 156, current: 163 },
-            { name: '안성시청점', prev: 151, current: 152 }, { name: '광주수완점', prev: 287, current: 294 },
-            { name: '광주봉선점', prev: 396, current: 367 }, { name: '분당판교점', prev: 280, current: 292 },
-            { name: '대구달서점', prev: 121, current: 116 }, { name: '천안불당점', prev: 152, current: 153 },
-            { name: '송파잠실점', prev: 195, current: 203 }, { name: '김포시청점', prev: 111, current: 116 },
-            { name: '동탄역점', prev: 284, current: 292 }, { name: '광명철산점', prev: 209, current: 224 },
-            { name: '포항장성점', prev: 105, current: 103 }, { name: '노원중계점', prev: 195, current: 201 },
-            { name: '송파문정점', prev: 121, current: 128 }, { name: '대전도안점', prev: 71, current: 75 },
-            { name: '다산신도시점', prev: 128, current: 103 }
+            { name: '시흥은계점', prev: 147, current: 152 }, { name: '부천상동점', prev: 169, current: 194 },
+            { name: '안산고잔점', prev: 129, current: 142 }, { name: '일산중산점', prev: 59, current: 73 },
+            { name: '시흥목감점', prev: 84, current: 94 }, { name: '분당오리점', prev: 110, current: 112 },
+            { name: '논산내동점', prev: 119, current: 133 }, { name: '광주풍암점', prev: 252, current: 276 },
+            { name: '수원광교점', prev: 275, current: 284 }, { name: '부평삼산점', prev: 106, current: 113 },
+            { name: '수원영통점', prev: 163, current: 161 }, { name: '안성시청점', prev: 152, current: 162 },
+            { name: '광주수완점', prev: 294, current: 321 }, { name: '광주봉선점', prev: 367, current: 427 },
+            { name: '분당판교점', prev: 292, current: 325 }, { name: '대구달서점', prev: 116, current: 114 },
+            { name: '천안불당점', prev: 153, current: 186 }, { name: '송파잠실점', prev: 203, current: 232 },
+            { name: '김포시청점', prev: 116, current: 120 }, { name: '동탄역점', prev: 292, current: 313 },
+            { name: '광명철산점', prev: 224, current: 245 }, { name: '포항장성점', prev: 103, current: 113 },
+            { name: '노원중계점', prev: 201, current: 225 }, { name: '송파문정점', prev: 128, current: 151 },
+            { name: '대전도안점', prev: 77, current: 93 }, { name: '다산신도시점', prev: 103, current: 126 },
+            { name: '부천신중동점', prev: 231, current: 0 }
         ].sort((a, b) => b.current - a.current).map((item, index) => ({...item, rank: index + 1}));
 
-        // 슬라이드 로직 수정: 첫 페이지 3개, 이후 4개씩
         function createPages(data) {
             let pages = [data.slice(0, 3)];
             for (let i = 3; i < data.length; i += 4) {

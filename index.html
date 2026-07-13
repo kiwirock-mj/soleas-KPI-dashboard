@@ -149,8 +149,7 @@
             { name: '김포시청점', prev: 16012266, current: 16436766 }, { name: '동탄역점', prev: 41378545, current: 42806566 },
             { name: '광명철산점', prev: 27842400, current: 29368150 }, { name: '포항장성점', prev: 12698783, current: 12884033 },
             { name: '노원중계점', prev: 29294650, current: 28387700 }, { name: '송파문정점', prev: 16759647, current: 19768181 },
-            { name: '대전도안점', prev: 11907000, current: 12655750 }, { name: '다산신도시점', prev: 15746916, current: 18570416 },
-            { name: '부천신중동점', prev: 37074997, current: 0 }
+            { name: '대전도안점', prev: 11907000, current: 12655750 }, { name: '다산신도시점', prev: 15746916, current: 18570416 }
         ].sort((a, b) => b.current - a.current).map((item, index) => ({...item, rank: index + 1}));
 
         const studentsData = [
@@ -166,8 +165,7 @@
             { name: '김포시청점', prev: 116, current: 120 }, { name: '동탄역점', prev: 292, current: 313 },
             { name: '광명철산점', prev: 224, current: 245 }, { name: '포항장성점', prev: 103, current: 113 },
             { name: '노원중계점', prev: 201, current: 225 }, { name: '송파문정점', prev: 128, current: 151 },
-            { name: '대전도안점', prev: 77, current: 93 }, { name: '다산신도시점', prev: 103, current: 126 },
-            { name: '부천신중동점', prev: 231, current: 0 }
+            { name: '대전도안점', prev: 77, current: 93 }, { name: '다산신도시점', prev: 103, current: 126 }
         ].sort((a, b) => b.current - a.current).map((item, index) => ({...item, rank: index + 1}));
 
         function createPages(data) {
